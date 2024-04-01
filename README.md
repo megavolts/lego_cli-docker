@@ -38,11 +38,12 @@ docker run -it --rm \
     -e ENV_LEGO_ACCEPT_TOS=true \
     -e ENV_LEGO_EMAIL=email@domain.com \
     -e ENV_LEGO_DOMAINS="*.domain.com" \
+    # -e ENV_LEGO_PATH=/etc/ssl/.lego \
     -e ENV_LEGO_DNS=cloudflare \
     -e CLOUDFLARE_EMAIL=email@domain.com \
     -e CLOUDFLARE_DNS_API_TOKEN= \
     -w /root \
-    -v $PWD:/root/.lego \
+    -v $PWD:/etc/ssl/.lego \
     joseluisq/docker-lets-encrypt
 
 # 2024/01/01 00:00:30 [INFO] [*.domain.com] acme: Obtaining bundled SAN certificate
@@ -87,6 +88,7 @@ To activate the environment variables support, set `ENV_LEGO_ENABLE=true`.
 - `ENV_LEGO_SERVER`
 - `ENV_LEGO_CSR`
 - `ENV_LEGO_ACCEPT_TOS=false`
+- `ENV_LEGO_PATH=/etc/ssl/.lego` Directory to use for storing the data.
 
 ### Challenge types
 
@@ -103,9 +105,20 @@ By default, the **Lego CLI** `run` subcommand will be executed, which will [obta
 
 To [renew a certificate](https://go-acme.github.io/lego/usage/cli/renew-a-certificate/), use the following environment variables instead.
 
-- `ENV_LEGO_RENEW=false`
+- `ENV_LEGO_RENEW=false` It tells Lego CLI to perform a `renewal` operation on demand.
 - `ENV_LEGO_RENEW_DAYS`
 - `ENV_LEGO_RENEW_HOOK`
+
+#### Certificate auto-renew
+
+**NOTE:** the auto-renew feature is limited to one domain for now.
+
+- `ENV_CERT_AUTO_RENEW=false` Enable the auto-renew feature
+- `ENV_CERT_AUTO_RENEW_DAYS_BEFORE_EXPIRE=3` The days before the certificate expiration to perform a renewal try.
+- `ENV_CERT_AUTO_RENEW_CRON_INTERVAL=0 0 * * *` The Crontab interval for the auto-renew checker (default, once a day)
+
+When the option is `ENV_CERT_AUTO_RENEW=true` then a script will programmatically check the certificate days before the expiration (`ENV_CERT_AUTO_RENEW_DAYS_BEFORE_EXPIRE`) and will perform a renewal try.
+Keep in mind that `ENV_LEGO_RENEW` should be disabled (`false`) when using this feature because it refers to the Lego CLI `renew` operation (subcommand).
 
 ### Additional arguments
 

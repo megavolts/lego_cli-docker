@@ -52,10 +52,39 @@ LABEL version="${VERSION}" \
     description="A Let's Encrypt Docker image using Lego CLI client." \
     maintainer="Jose Quintana <joseluisq.net>"
 
+# General options
+ENV ENV_LEGO_EMAIL=
+ENV ENV_LEGO_DOMAINS=
+ENV ENV_LEGO_SERVER=
+ENV ENV_LEGO_CSR=
+ENV ENV_LEGO_ACCEPT_TOS=false
+ENV ENV_LEGO_PATH=/etc/ssl/.lego
+
+# Challenge types
+ENV ENV_LEGO_HTTP=false
+# See Lego DNS providers supported https://go-acme.github.io/lego/dns/#dns-providers
+ENV ENV_LEGO_DNS=
+
+# Run hooks
+ENV ENV_LEGO_RUN_HOOK=
+
+# Specify if the operation will be a `renewal`
+ENV ENV_LEGO_RENEW=false
+ENV ENV_LEGO_RENEW_DAYS=
+ENV ENV_LEGO_RENEW_HOOK=
+
+# Certificate auto-renew feature
+ENV ENV_CERT_AUTO_RENEW=false
+# Renew the certificate 3 days before expiration
+ENV ENV_CERT_AUTO_RENEW_DAYS_BEFORE_EXPIRE=3
+# Check certificate expiration once a day by default
+ENV ENV_CERT_AUTO_RENEW_CRON_INTERVAL="0 0 * * *"
+
 RUN set -eux \
     && DEBIAN_FRONTEND=noninteractive apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends --no-install-suggests \
          ca-certificates \
+         cron \
          tzdata \
     # Clean up local repository of retrieved packages and remove the package lists
     && apt-get clean \
@@ -64,6 +93,7 @@ RUN set -eux \
 
 COPY --from=build /usr/local/bin/lego /usr/local/bin/
 COPY ./entrypoint.sh /usr/local/bin/
+COPY ./certificate_renew.sh /usr/local/bin/
 
 ENTRYPOINT ["entrypoint.sh"]
 
