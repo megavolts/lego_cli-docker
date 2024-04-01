@@ -2,7 +2,7 @@
 
 #
 # Custom script to renew a certificate before it expires.
-# This script can be run by a cron-tab to check for the certificate expiration programmatically.
+# This script will be run by a cron-tab to check for the certificate expiration programmatically.
 #
 
 echo "[info] Starting certificate check script..."

@@ -61,11 +61,12 @@ elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
     ## Enable auto-renew on-demand
     if [[ -z "$ENV_LEGO_RENEW" ]] || [[ "$ENV_LEGO_RENEW" = "false" ]]; then
         if [[ -n "$ENV_CERT_AUTO_RENEW" ]] && [[ "$ENV_CERT_AUTO_RENEW" = "true" ]]; then
-            # Set the default crontab, redirect output to Docker stdout
+            # Set the default Crontab and redirect its output to Docker stdout
             declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
             cmd="SHELL=/bin/bash BASH_ENV=/container.env /usr/local/bin/certificate_renew.sh > /proc/1/fd/1 2>&1"
             crontab -l | echo "$ENV_CERT_AUTO_RENEW_CRON_INTERVAL $cmd" | crontab -
-            echo "[info] The certificate auto-renew process is configured and waiting for the iteration..."
+            echo "[info] The certificate auto-renewal process is configured successfully!"
+            echo "[info] Waiting for the Crontab scheduler to run the task..."
             echo "[info]    Crontab interval: $ENV_CERT_AUTO_RENEW_CRON_INTERVAL"
             cron -f
             exit
