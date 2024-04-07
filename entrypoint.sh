@@ -15,8 +15,7 @@ elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
     op=""
 
     # Renew operation on demand which also skip auto-renew when file called directly
-    should_renew=$INPUT
-    if [[ -n "$should_renew" ]] && [[ "$should_renew" = "--certificate-renew" ]]; then
+    if [[ -n "$INPUT" ]] && [[ "$INPUT" = "--certificate-renew" ]]; then
         ENV_LEGO_RENEW=true
     fi
 
@@ -60,23 +59,28 @@ elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
 
     set -- lego $args$op
 
-    ## Enable auto-renew on-demand
+    ## Enable auto-renew only at start up time
     if [[ -z "$ENV_LEGO_RENEW" ]] || [[ "$ENV_LEGO_RENEW" = "false" ]]; then
         if [[ -n "$ENV_CERT_AUTO_RENEW" ]] && [[ "$ENV_CERT_AUTO_RENEW" = "true" ]]; then
-            # Set the default Crontab and redirect its output to Docker stdout
+            # 1. Execute the requested Lego command
+            echo "[info] Continuing with running the requested command..."
+            exec "$@"
+
+            # 2. Configure the Crontab task and redirect its output to Docker stdout
+            echo
+            echo "[info] Configuring the certificate auto-renewal Crontab task..."
             declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
             cmd="SHELL=/bin/bash BASH_ENV=/container.env /usr/local/bin/certificate_renew.sh > /proc/1/fd/1 2>&1"
-            
             crontab -l | echo "$ENV_CERT_AUTO_RENEW_CRON_INTERVAL $cmd" | crontab -
-            echo "[info] The certificate auto-renewal process is configured successfully!"
+
+            # 3. Finally, start the Crontab scheduler and block
+            echo "[info] The Crontab task is configured successfully!"
             echo "[info] Waiting for the Crontab scheduler to run the task..."
-            echo "[info]    Crontab interval: $ENV_CERT_AUTO_RENEW_CRON_INTERVAL"
+            echo "[info]   Crontab interval: $ENV_CERT_AUTO_RENEW_CRON_INTERVAL"
             cron -f
 
-            # Do not proceed if the script was executed on demand (e.g. crontab)
-            if [[ "$INPUT" = "--certificate-renew" ]]; then   
-                exit
-            fi
+            echo "[info]  Stopping the Crontab scheduler..."
+            exit
         fi
     fi
 fi
