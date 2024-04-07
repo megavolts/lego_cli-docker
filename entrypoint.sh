@@ -5,15 +5,17 @@
 
 set -e
 
+INPUT=$1
+
 # Check if incoming command contains flags
-if [[ "${1#-}" != "$1" ]] && [[ "$1" != "--certificate-renew" ]]; then
+if [[ "${1#-}" != "$INPUT" ]] && [[ "$INPUT" != "--certificate-renew" ]]; then
     set -- lego "$@"
 elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
     args=""
     op=""
 
     # Renew operation on demand which also skip auto-renew when file called directly
-    should_renew=$1
+    should_renew=$INPUT
     if [[ -n "$should_renew" ]] && [[ "$should_renew" = "--certificate-renew" ]]; then
         ENV_LEGO_RENEW=true
     fi
@@ -64,12 +66,17 @@ elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
             # Set the default Crontab and redirect its output to Docker stdout
             declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
             cmd="SHELL=/bin/bash BASH_ENV=/container.env /usr/local/bin/certificate_renew.sh > /proc/1/fd/1 2>&1"
+            
             crontab -l | echo "$ENV_CERT_AUTO_RENEW_CRON_INTERVAL $cmd" | crontab -
             echo "[info] The certificate auto-renewal process is configured successfully!"
             echo "[info] Waiting for the Crontab scheduler to run the task..."
             echo "[info]    Crontab interval: $ENV_CERT_AUTO_RENEW_CRON_INTERVAL"
             cron -f
-            exit
+
+            # Do not proceed if the script was executed on demand (e.g. crontab)
+            if [[ "$INPUT" = "--certificate-renew" ]]; then   
+                exit
+            fi
         fi
     fi
 fi
