@@ -62,9 +62,16 @@ elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
     ## Enable auto-renew only at start up time
     if [[ -z "$ENV_LEGO_RENEW" ]] || [[ "$ENV_LEGO_RENEW" = "false" ]]; then
         if [[ -n "$ENV_CERT_AUTO_RENEW" ]] && [[ "$ENV_CERT_AUTO_RENEW" = "true" ]]; then
-            # 1. Execute the requested Lego command
-            echo "[info] Continuing with running the requested command..."
-            exec "$@"
+            domain=$(echo $ENV_LEGO_DOMAINS | sed 's/;.*//' | sed 's/*.//')
+            cert_file=$ENV_LEGO_PATH/certificates/_.$domain.crt
+
+            # 1. Run Lego command only if a certificate does not exist for this domain
+            if [ -f $cert_file ]; then
+                echo "[info] A certificate file '$cert_file' was found. Command execution skipped."
+            else
+                echo "[info] Continuing with running the requested command..."
+                lego $args$op
+            fi
 
             # 2. Configure the Crontab task and redirect its output to Docker stdout
             echo
