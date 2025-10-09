@@ -49,10 +49,26 @@ elif [[ -n "$ENV_LEGO_ENABLE" ]] && [[ "$ENV_LEGO_ENABLE" = "true" ]]; then
 
     # General options
     if [[ -n "$ENV_LEGO_EMAIL" ]]; then args="$args --email=$ENV_LEGO_EMAIL"; fi
-    # TODO: add support for a domain list
+
+    # MegaVolts: added suppor for domain list
+    if [[ -n "$LEGO_DOMAINS" ]];
+        then
+        for domain in $(echo $LEGO_DOMAINS | tr "," " ")
+        do 
+            args="$args --domains=$domain" 
+        done
+    fi
+
+    # MegaVolts: staging options
+    echo "[info] Stagin enable. Overriding ENV_LEGO_SERVER with staging server" 
+    if [[ "$ENV_LEGO_STAGING" =  true ]]; then ENV_LEGO_SERVER="https://acme-staging-v02.api.letsencrypt.org/directory"; fi
+
+
     if [[ -n "$ENV_LEGO_DOMAINS" ]]; then args="$args --domains=$ENV_LEGO_DOMAINS"; fi
     if [[ -n "$ENV_LEGO_SERVER" ]]; then args="$args --server=$ENV_LEGO_SERVER"; fi
     if [[ -n "$ENV_LEGO_CSR" ]]; then args="$args --csr=$ENV_LEGO_CSR"; fi
+
+
 
     # Additional arguments
     if [[ -n "$ENV_LEGO_ARGS" ]]; then args="$args$ENV_LEGO_ARGS"; fi
