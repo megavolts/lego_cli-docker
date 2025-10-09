@@ -124,12 +124,12 @@ To activate the environment variables support, set `ENV_LEGO_ENABLE=true`.
 ### General options
 
 - `ENV_LEGO_EMAIL`
-- `ENV_LEGO_DOMAINS`
+- `ENV_LEGO_DOMAINS` List of domains, domain name should be comma separated without space: domain1,domain2...
 - `ENV_LEGO_SERVER`
 - `ENV_LEGO_CSR`
 - `ENV_LEGO_ACCEPT_TOS=false`
 - `ENV_LEGO_PATH=/etc/ssl/.lego` Directory to use for storing the data.
-
+- `ENV_LEGO_STAGING=false` Set to true to enable staging which override default server with ACME staging server
 ### Challenge types
 
 - `ENV_LEGO_HTTP=false`
@@ -179,10 +179,19 @@ For more details check out the [Lego CLI](https://go-acme.github.io/lego/usage/c
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in current work by you, as defined in the Apache-2.0 license, shall be dual licensed as described below, without any additional terms or conditions.
 
-Feel free to send some [Pull request](https://github.com/joseluisq/docker-lets-encrypt/pulls) or file an [issue](https://github.com/joseluisq/docker-lets-encrypt/issues).
+## Acknowledgement
+
+This work is build upon [Jose Quintana](https://joseluisq.net)'s Let's Encrypt Docker.
+
+Feel free to send some [Pull request](https://github.com/megavolts/lego_cli-docker/pulls) or file an [issue](https://github.com/megavolts/lego_cli-docker/issues).
+
+# License
 
 ## License
 
-This work is primarily distributed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE).
+Unless explicitly stated otherwise, this work is primarily distributed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE).
 
-© 2024-present [Jose Quintana](https://joseluisq.net)
+## License for other compoents
+
+- Docker: [Apache 2.0](https://github.com/docker/docker/blob/master/LICENSE)
+- Lego: [MIT License](https://github.com/go-acme/lego/blob/master/LICENSE)
