@@ -60,6 +60,9 @@ ENV ENV_LEGO_CSR=
 ENV ENV_LEGO_ACCEPT_TOS=false
 ENV ENV_LEGO_PATH=/etc/ssl/.lego
 
+# Staging option: define server to 
+ENV ENV_LEGO_STAGING=false
+
 # Challenge types
 ENV ENV_LEGO_HTTP=false
 # See Lego DNS providers supported https://go-acme.github.io/lego/dns/#dns-providers
