@@ -1,11 +1,11 @@
 # Docker Let's Encrypt 
-
+<!---
 <a href="https://github.com/joseluisq/docker-lets-encrypt/actions/workflows/devel.yml" title="devel ci"><img src="https://github.com/joseluisq/docker-lets-encrypt/actions/workflows/devel.yml/badge.svg?branch=master"></a> 
 <a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/" title="Docker Image Version (tag latest semver)"><img src="https://img.shields.io/docker/v/joseluisq/docker-lets-encrypt/latest"></a> 
 <a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/tags" title="Docker Image Size (tag)"><img src="https://img.shields.io/docker/image-size/joseluisq/docker-lets-encrypt/latest"></a> 
 <a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/joseluisq/docker-lets-encrypt.svg"></a> 
-
-> A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest __Debian [12-slim](https://hub.docker.com/_/debian/tags?page=1&name=12-slim)__ ([Bookworm](https://www.debian.org/News/2023/20230610)).
+-->
+> An A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest [__Alpine](https://hub.docker.com/_/alpine)__.
 
 ## Usage
 
@@ -13,41 +13,34 @@ Run the Docker image
 
 ```sh
 # Run Lego CI directly with a particular argument
-docker run --rm joseluisq/docker-lets-encrypt -v
+docker run --rm megavolts/lego_cli -v
 
 # Or run the Docker image in interactive mode
-docker run -it --rm joseluisq/docker-lets-encrypt bash
-```
-
-Or extend it
-
-```Dockerfile
-FROM joseluisq/docker-lets-encrypt
-# your stuff...
+docker run -it --rm megavolts/lego_cli /bin/sh
 ```
 
 ## Examples
 
-Below is an example of obtaining a **wildcard certificate** using the **Cloudflare** provider.
+Below is an example of obtaining a **wildcard certificate** using the **Porkbun** provider.
 
-In this case, make sure to create first a [Cloudflare API User Token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/) for your specific domain with the `DNS:Edit` permission.
+In this case, make sure to create first a [Porkbun API Token](https://kb.porkbun.com/article/190-getting-started-with-the-porkbun-api) for your account, and enable `API token` for the domain.
 
 ### Using Docker run
 
 ```sh
 docker run -it --rm \
     # Lego CLI options
-    -e ENV_LEGO_ENABLE=true \
-    -e ENV_LEGO_ACCEPT_TOS=true \
-    -e ENV_LEGO_EMAIL=email@domain.com \
-    -e ENV_LEGO_DOMAINS="*.domain.com" \
+    -e LEGO_ENABLE=true \
+    -e LEGO_ACCEPT_TOS=true \
+    -e LEGO_EMAIL=email@domain.com \
+    -e LEGO_DOMAINS="*.domain.com" \
     # Lego CLI DNS provider
-    -e ENV_LEGO_DNS=cloudflare \
+    -e LEGO_DNS=cloudflare \
     -e CLOUDFLARE_EMAIL=email@domain.com \
     -e CLOUDFLARE_DNS_API_TOKEN= \
     # TLS auto-renewal feature (optional)
-    -e ENV_CERT_AUTO_RENEW=true \
-    -e ENV_CERT_AUTO_RENEW_CRON_INTERVAL="0 0 * * *" \
+    -e CERT_AUTO_RENEW=true \
+    -e CERT_AUTO_RENEW_CRON_INTERVAL="0 0 * * *" \
     # Directory mapping (bind mount) for certificate/key files
     -v /etc/ssl/certs/domain.com:/etc/ssl/.lego \
     joseluisq/docker-lets-encrypt
@@ -71,7 +64,7 @@ docker run -it --rm \
 
 **Notes:**
 
-- `ENV_LEGO_ACCEPT_TOS=true` is used to accept the [Let's Encrypt terms of service](https://community.letsencrypt.org/tos).
+- `LEGO_ACCEPT_TOS=true` is used to accept the [Let's Encrypt terms of service](https://community.letsencrypt.org/tos).
 - The container `.lego` directory will contain the certificates and keys, make sure to bind it to a specific host directory. See https://go-acme.github.io/lego/usage/cli/general-instructions/
 - See the **Cloudflare** provider options for more details https://go-acme.github.io/lego/dns/cloudflare/
 
@@ -87,20 +80,23 @@ services:
     image: joseluisq/docker-lets-encrypt:0.0.3
     environment:
       # Lego CLI options
-      - "ENV_LEGO_ENABLE=true"
-      - "ENV_LEGO_ACCEPT_TOS=true"
-      - "ENV_LEGO_EMAIL=${ENV_LEGO_EMAIL}"
-      - "ENV_LEGO_DOMAINS=*.domain.com"
+      - "LEGO_ENABLE=true"
+      - "LEGO_ACCEPT_TOS=true"
+      - "LEGO_EMAIL=${LEGO_EMAIL}"
+      - "LEGO_DOMAINS=*.domain.com"
       # Lego CLI DNS provider
-      - "ENV_LEGO_DNS=cloudflare"
-      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
-      - "CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}"
-      # TLS auto-renewal feature (optional)
-      - "ENV_CERT_AUTO_RENEW=true"
-      - "ENV_CERT_AUTO_RENEW_CRON_INTERVAL=0 0 * * *"
+      - "LEGO_DNS=cloudflare"
+      - "PORKBUN_API_KEY=${PORKBUN_API_KEY}"
+      - "PORKBUN_SECRET_API_KEY=${PORKBUN_SECRET_API_KEY}"
+      # AUTORENEWAL option
+      - AUTORENEW=true
+      # STAGING option
+      - STAGING=true
+      # DEBUG option
+      - DEBUG=true
     volumes:
       # Directory mapping (bind mount) for certificate/key files
-      - /etc/ssl/certs/domain.com:/etc/ssl/.lego
+      - ./ssl/:/opt/ssl/
     deploy:
       replicas: 1
       update_config:
@@ -108,6 +104,8 @@ services:
       restart_policy:
         condition: on-failure
 ```
+
+> By default this container set to accetp the current Let's ENcrypt terms of service, overriding the default config in lego.
 
 ## Environment variables
 
@@ -117,27 +115,27 @@ Below are the environment variables supported and their default values.
 
 ### Activation
 
-To activate the environment variables support, set `ENV_LEGO_ENABLE=true`.
-
-- `ENV_LEGO_ENABLE=false` 
+To activate the environment variables support, set `LEGO_ENABLE=true`.
+- `LEGO_ENABLE=false` 
 
 ### General options
 
-- `ENV_LEGO_EMAIL`
-- `ENV_LEGO_DOMAINS`
-- `ENV_LEGO_SERVER`
-- `ENV_LEGO_CSR`
-- `ENV_LEGO_ACCEPT_TOS=false`
-- `ENV_LEGO_PATH=/etc/ssl/.lego` Directory to use for storing the data.
+- `LEGO_EMAIL` Email used for registration and recovery contact.
+- `LEGO_DOMAINS` Domain or list of domains to include in the certificate. Multiple domains can be specified using a comma separated list (e.g. domain1,domain2,domain3)
+- `LEGO_SERVER` CA hostname (and optionally :port). The server certificate must be trusted in order to avoid further modifications to the client. (default: "https://acme-v02.api.letsencrypt.org/directory")
+- `LEGO_CSR` Certificate signing request filename, if an external CSR is to be used.
+- `LEGO_ACCEPT_TOS=true` By setting this flag to true you indicate that you accept the current Let's Encrypt terms of service. Set to true.
+- `LEGO_PATH=/etc/ssl/.lego` Directory to use for storing the data.
+
+### Staging
+- `STAGING=false` By setting this flag to true, the `LEGO_SERVER` is override with the default Let's Encrypt staging server (https://acme-staging-v02.api.letsencrypt.org/directory).
 
 ### Challenge types
 
-- `ENV_LEGO_HTTP=false`
-- `ENV_LEGO_DNS` See Lego DNS providers supported https://go-acme.github.io/lego/dns/#dns-providers
+- `LEGO_HTTP=false` By setting this flag to ture, use the HTTP-01 challenge to solve challenges. Can be mixed with other types of challenges.
+- `LEGO_DNS` See Lego DNS providers supported https://go-acme.github.io/lego/dns/#dns-providers
 
 ### Obtain a new certificate
-
-- `ENV_LEGO_RUN_HOOK`
 
 By default, the **Lego CLI** `run` subcommand will be executed, which will [obtain a new certificate](https://go-acme.github.io/lego/usage/cli/obtain-a-certificate/).
 
@@ -145,32 +143,30 @@ By default, the **Lego CLI** `run` subcommand will be executed, which will [obta
 
 To [renew a certificate](https://go-acme.github.io/lego/usage/cli/renew-a-certificate/), use the following environment variables instead.
 
-- `ENV_LEGO_RENEW=false` It tells Lego CLI to perform a `renewal` operation on demand.
-- `ENV_LEGO_RENEW_DAYS`
-- `ENV_LEGO_RENEW_HOOK`
+- `LEGO_RENEW=false` It tells Lego CLI to perform a `renewal` operation on demand.
+- `LEGO_RENEW_DAYS=30` The number of days left on a certificate to renew it.
 
-#### Certificate auto-renew
+#### Certificate autorenewal
 
-**NOTE:** the auto-renew feature is limited to one domain for now.
+**NOTE:** The autorenewal feature should work for a list of domain
 
-- `ENV_CERT_AUTO_RENEW=false` Enable the auto-renew feature
-- `ENV_CERT_AUTO_RENEW_DAYS_BEFORE_EXPIRE=3` The days before the certificate expiration to perform a renewal try.
-- `ENV_CERT_AUTO_RENEW_CRON_INTERVAL=0 0 * * *` The Crontab interval for the auto-renew checker (default, once a day)
+- `AUTORENEW=true` By setting this flg to false, disables the autorenewal feature
+- `AUTORENEW_PERIOD=3` Number of days before the certificate expiration to perform a renewal try.
+- `AUTORENEW_CRON=0 */24* * * *` The crontab schedule for the autorenewal checker (default, once every 24 hours)
 
-When the option is `ENV_CERT_AUTO_RENEW=true` then a script will programmatically check the certificate days before the expiration (`ENV_CERT_AUTO_RENEW_DAYS_BEFORE_EXPIRE`) and will perform a renewal try.
-Keep in mind that `ENV_LEGO_RENEW` should be disabled (`false`) when using this feature because it refers to the Lego CLI `renew` operation (subcommand).
+When the option is `AUTORENEW=true` then a script will programmatically check the certificate days before the expiration (`AUTORENEW_PERIOD`) and will perform a renewal try. Note that setting `AUTORENEW=true` disables `LEGO_RENEW` should be disabled (`false`) when using this feature because it refers to the Lego CLI `renew` operation (subcommand).
 
 ### Additional arguments
 
-- `ENV_LEGO_ARGS`
+- `LEGO_ARGS`
 
 Print all available Lego CLI options.
 
 ```sh
 # global options
-docker run --rm joseluisq/docker-lets-encrypt -h
+docker run --rm megavolts/lego_cli -h
 # or specific subcommand options
-docker run --rm joseluisq/docker-lets-encrypt lego run -h
+docker run --rm megavolts/lego_cli lego run -h
 ```
 
 For more details check out the [Lego CLI](https://go-acme.github.io/lego/usage/cli/) available options.
@@ -179,10 +175,19 @@ For more details check out the [Lego CLI](https://go-acme.github.io/lego/usage/c
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in current work by you, as defined in the Apache-2.0 license, shall be dual licensed as described below, without any additional terms or conditions.
 
-Feel free to send some [Pull request](https://github.com/joseluisq/docker-lets-encrypt/pulls) or file an [issue](https://github.com/joseluisq/docker-lets-encrypt/issues).
+## Acknowledgement
+
+This work is build upon [Jose Quintana](https://joseluisq.net)'s Let's Encrypt Docker.
+
+Feel free to send some [Pull request](https://github.com/megavolts/lego_cli-docker/pulls) or file an [issue](https://github.com/megavolts/lego_cli-docker/issues).
+
+# Licenses
 
 ## License
 
-This work is primarily distributed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE).
+Unless explicitly stated otherwise, this work is primarily distributed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE).
 
-© 2024-present [Jose Quintana](https://joseluisq.net)
+## License for other compoents
+
+- Docker: [Apache 2.0](https://github.com/docker/docker/blob/master/LICENSE)
+- Lego: [MIT License](https://github.com/go-acme/lego/blob/master/LICENSE)
