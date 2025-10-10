@@ -39,8 +39,8 @@ jobs:
             if [[ $LATEST_RELEASE = $BUILD_IMAGE_VERSION ]];
                 then
                 echo "Release $BUILD_IMAGE_VERSION already exist. Updated build version with next revisoin"
-                BUILD_VERSION=$( $BUILD_IMAGE_VERSION | cut -d- -f1)
-                BUILD_REVISION=$( $BUILD_IMAGE_VERSION | cut -d- -f2)
+                BUILD_VERSION=$( echo $BUILD_IMAGE_VERSION | cut -d- -f1)
+                BUILD_REVISION=$( echo $BUILD_IMAGE_VERSION | cut -d- -f2)
                 BUILD_REVISION=$(( $BUILD_REVISION +1 ))
                 BUILD_IMAGE_VERSION=$BUILD_VERSION-$BUILD_REVISION
                 echo "BUILD_IMAGE_VERSION=$BUILD_IMAGE_VERSION" >> $GITHUB_OUTPUT
