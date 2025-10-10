@@ -26,6 +26,7 @@ jobs:
       run: |
         cat buildvars | grep BUILD_DATE >> $GITHUB_OUTPUT
         cat buildvars | grep LEGO_VERSION >> $GITHUB_OUTPUT
+
         BUILD_IMAGE_VERSION=$(cat buildvars | grep BUILD_IMAGE_VERSION)
         BUILD_VERSION=$(echo $BUILD_IMAGE_VERSION | cut -d- -f1)
         BUILD_REVISION=$(echo $BUILD_IMAGE_VERSION | cut -d- -f2)
@@ -33,6 +34,7 @@ jobs:
             then
             echo "No release existing"
             cat buildvars | grep BUILD_IMAGE_VERSION >> $GITHUB_OUTPUT
+            echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT
         else
             LATEST_RELEASE=$(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | jq '.[0] | .name' -r)
 
@@ -43,9 +45,11 @@ jobs:
                 BUILD_REVISION=$( echo $BUILD_IMAGE_VERSION | cut -d- -f2)
                 BUILD_REVISION=$(( $BUILD_REVISION +1 ))
                 BUILD_IMAGE_VERSION=$BUILD_VERSION-$BUILD_REVISION
+
                 echo "BUILD_IMAGE_VERSION=$BUILD_IMAGE_VERSION" >> $GITHUB_OUTPUT
                 echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT
-                echo "FLAG_REVISION=1" >>$GITHUB_OUTPUT
+
+                
             else
               echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT
               cat buildvars | grep BUILD_IMAGE_VERSION >> $GITHUB_OUTPUT
@@ -106,7 +110,7 @@ jobs:
       
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action
 
       - name: Login to Dockerhub
         if: github.event_name != 'pull_request'
