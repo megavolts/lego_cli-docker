@@ -8,10 +8,8 @@
 ![CD BUILD](https://img.shields.io/github/actions/workflow/status/megavolts/lego_cli-docker/CD-30-tag_and_release.yml?branch=main&label=Build)
 
 
-
-
-![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-MIT-green)[https://github.com/megavolts/lego_cli-docker/blob/main/LICENSE-MIT]
-![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-Apache-green)[https://github.com/megavolts/lego_cli-docker/blob/main/LICENSE-APACHE]
+![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-Apache-green)
 
 ![Supports aarch64 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/aarch64-yes-green)
 ![Supports amd64 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/amd64-yes-green)
