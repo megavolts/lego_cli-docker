@@ -1,0 +1,28 @@
+services:
+  lego_cli:
+    container_name: lego
+    image: megavolts/lego_cli:latest
+    environment:
+      # Lego CLI options
+      - LEGO_ENABLE=true
+      - LEGO_EMAIL=${LEGO_EMAIL}
+      # Domains should be comma separated
+      - LEGO_DOMAINS=domain.tld
+      # Lego CLI DNS provider
+      - LEGO_DNS=porkbun
+      - PORKBUN_API_KEY=${PORKBUN_API_KEY}
+      - PORKBUN_SECRET_API_KEY=${PORKBUN_SECRET_API_KEY}
+      # TLS auto-renewal feature (optional)
+      - AUTORENEW=true
+      # STAGING OPTION
+      - STAGING=true
+      - DEBUG=true
+    volumes:
+      # Directory mapping (bind mount) for certificate/key files
+      - ./ssl/:/opt/lego/ssl/
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
