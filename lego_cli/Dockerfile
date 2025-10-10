@@ -17,7 +17,8 @@ RUN apk --update --no-cache add \
         ca-certificates \
         curl \
         file \
-        tzdata
+        tzdata \
+        openssl
         
 # 1.1 Install lego
 RUN echo "Installing lego for $TARGETPLATFORM..." \
@@ -51,7 +52,7 @@ RUN echo "Testing docker image..." \
 # 1.3 Configure lego_cli 
 COPY rootfs/ /
 RUN echo "Make entrypoint and renewal scrips executable..." \
-    # && chmod 755 /opt/entrypoint.sh \
+    && chmod 755 /usr/local/bin/entrypoint.sh \
     && chmod 755 /opt/lego/renew_certificate.sh
 
 # Stage 2 - build for target platform
@@ -80,20 +81,18 @@ ENV LEGO_EMAIL= \
     # Number of day before certificate expiration when renewal attempt should start.
     # Default: 3 days
     AUTORENEW_PERIOD="3" \
-    # Cron job trigger to check certificate expiration
+    # Cron job schedule to check certificate expiration
     # Default: at midnight, everyday
-    AUTORENEW_CRON="0 */24 * * *" \
+    AUTORENEW_CRON_SCHEDULE="0 */24 * * *" \
 # Challenge types
    # HTTP. Default: false
    LEGO_HTTP=false \
    # DNS. 
    # Supported DNS providers: https://go-acme.github.io/lego/dns/#dns-providers
    LEGO_DNS= \
-# Renew certificate
-# Set to true to force renew certificate in LEGO_RENEW_DAYS days [default 30]
-    LEGO_RENEW="false" \
-    # Period validity for certificate
-    LEGO_RENEW_DAYS="30"
+# Renew certificate using the dynamic option, which is default behavior on upcoming
+# lego v5 release.
+    LEGO_RENEW="false"
 
 RUN apk --update --no-cache add \
         ca-certificates \
@@ -104,6 +103,7 @@ RUN apk --update --no-cache add \
 # Copy lego binary and opt files from buildenv
 COPY --from=buildenv /usr/local/bin/lego /usr/local/bin/entrypoint.sh /bin/
 COPY --from=buildenv /opt /opt
+COPY --from=buildenv /usr/bin/openssl /usr/bin
 
 ENTRYPOINT ["entrypoint.sh"]
 
