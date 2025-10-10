@@ -4,7 +4,9 @@ name: CD 30 Tag and Release
 on:
 #  workflow_dispatch:     
   workflow_run:
-    workflows: [CD 20 Build and Push, CD 21 Manual Build and push]
+    workflows:
+      - CD 20 Build and Push
+      - CD 21 Manual Build and push
     types:
       - completed
 
