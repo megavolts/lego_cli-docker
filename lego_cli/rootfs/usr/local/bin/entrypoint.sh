@@ -28,18 +28,14 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
     # Operation types, the default is `run` subcommand
     if [[ -n "$LEGO_RENEW" ]] && [[ "$LEGO_RENEW" = "true" ]];
         then
-        op=" renew"
-        if [[ -n "$LEGO_RENEW_DAYS" ]];
-            then
-            op="$op --days=$LEGO_RENEW_DAYS"
-        fi
+        op=" renew --dynamic"
     else
         op=" run"
     fi
     
     if [[ -n "$LEGO_PATH" ]];
         then
-        mkdir $LEGO_PATH       
+        mkdir -p $LEGO_PATH       
         args="$args --path=$LEGO_PATH"
     fi
 
@@ -111,9 +107,11 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
 
             # 1. If a certificate does not exist, a certificate is requested
             # NOTE: If a domain list is provided, the certificate is named after the first domain
-            domain=$(echo $ENV_LEGO_DOMAINS | sed 's/;.*//' | sed 's/*.//')
-            cert_file=$ENV_LEGO_PATH/certificates/$domain.crt
-
+            domain=$(echo $LEGO_DOMAINS | sed 's/,.*//' | sed 's/;.*//' | sed 's/*.//')
+            cert_file=$LEGO_PATH/certificates/$domain.crt
+            echo $LEGO_DOMAINS
+            echo $domain
+            echo $cert_file
             # TODO: check that the certificate covers all the domains
             if [ -f $cert_file ];
                 then
@@ -126,22 +124,21 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
             # 2. Configure the Crontab task and redirect its output to Docker stdout
             echo
             echo "[info] Adding autorenewal task as a cronjob"
-            echo "LEGO_DOMAINS=$LEGO_DOMAINS" > $LEGO_PATH/certificates/.crontab.env
-            echo "AUTORENEW_PERIOD=$AUTORENEW_PERIOD" >> $LEGO_PATH/certificates/.crontab.env
-            echo "DEBUG=$DEBUG" >> $LEGO_PATH/certificates/.crontab.env
-            echo "LEGO_RENEW=$LEGO_RENEW" >> $LEGO_PATH/certificates/.crontab.env
-            cmd="SHELL=/bin/ash BASH_ENV=$LEGO_PATH/certificates/.crontab.env /opt/lego/renew_certificate.sh > /proc/1/fd/1 2>&1"
-            crontab -l | echo "$AUTORENEW_CHECK $cmd" | crontab -
-            echo "[info] The Crontab task is configure with the schedule $AUTORENEW_CHECK"
+            echo "LEGO_DOMAINS=$LEGO_DOMAINS" > $LEGO_PATH/certificates/.$domain-crontab.env
+            echo "AUTORENEW_PERIOD=$AUTORENEW_PERIOD" >> $LEGO_PATH/certificates/.$domain-crontab.env
+            echo "DEBUG=$DEBUG" >> $LEGO_PATH/certificates/.$domain-crontab.env
+            echo "LEGO_RENEW=$LEGO_RENEW" >> $LEGO_PATH/certificates/.$domain-crontab.env
+            cmd="SHELL=/bin/ash BASH_ENV=$LEGO_PATH/certificates/.$domain-crontab.env /opt/lego/renew_certificate.sh > /proc/1/fd/1 2>&1"
+            crontab -l | echo "$AUTORENEW_CRON_SCHEDULE $cmd" | crontab -
+            echo "[info] The Crontab task is configure with the schedule $AUTORENEW_CRON_SCHEDULE"
             if $DEBUG ; then
                 echo "[debug] Checking crontab"
                 echo "$(crontab -l)"
             fi
             
             # Make sure the certificate are accessible outside of the container by a non-root user
-            chmod 775 $LEGO_PATH -R
             # Use ` && tail -f /dev/null` to let the container running
-            echo "[info]  Stopping the Crontab scheduler..."
+            chmod 555 $LEGO_PATH -R && tail -f /dev/null
             exit
         fi
     fi
@@ -149,5 +146,3 @@ fi
 # Make sure the certificate are accessible outside of the container by a non-root user
 echo "$@"
 exec "$@"
-# Use ` && tail -f /dev/null` to let the container running
-chmod 775 $LEGO_PATH -R && tail -f /dev/null
