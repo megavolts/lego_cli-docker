@@ -27,9 +27,10 @@ jobs:
         cat buildvars | grep BUILD_DATE >> $GITHUB_OUTPUT
         cat buildvars | grep LEGO_VERSION >> $GITHUB_OUTPUT
 
-        BUILD_IMAGE_VERSION=$(cat buildvars | grep BUILD_IMAGE_VERSION)
+        BUILD_IMAGE_VERSION=$(cat buildvars | grep BUILD_IMAGE_VERSION  | cut -d= -f2)
         BUILD_VERSION=$(echo $BUILD_IMAGE_VERSION | cut -d- -f1)
         BUILD_REVISION=$(echo $BUILD_IMAGE_VERSION | cut -d- -f2)
+
         if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | grep "status" | cut -d\" -f4) = 404 ]];
             then
             echo "No release existing"
