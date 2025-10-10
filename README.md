@@ -11,11 +11,11 @@
 ![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-MIT-green)
 ![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-Apache-green)
 
-![Supports aarch64 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/aarch64-yes-green)
-![Supports amd64 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/amd64-yes-green)
-![Supports armv7 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/armv7-yes-green)
-![Supports armv6 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/armv6-yes-green)
-![Supports i386 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/i386-yes-green)
+![Supports aarch64 Architecture](https://img.shields.io/badge/aarch64-yes-green)
+![Supports amd64 Architecture](https://img.shields.io/badge/amd64-yes-green)
+![Supports armv7 Architecture](https://img.shields.io/badge/armv7-yes-green)
+![Supports armv6 Architecture](https://img.shields.io/badge/armv6-yes-green)
+![Supports i386 Architecture](https://img.shields.io/badge/i386-yes-green)
 
 
 
