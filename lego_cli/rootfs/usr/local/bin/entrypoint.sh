@@ -6,7 +6,7 @@ set -e
 
 INPUT=$1
 
-if $DEBUG ; then
+if [[ -n "$DEBUG" ]] && $DEBUG; then
     echo "[debug] Debug mode enabled"
 fi
 
@@ -60,7 +60,7 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
         then
         args="$args --email=$LEGO_EMAIL"
     fi
-    
+
     if [[ -n "$LEGO_DOMAINS" ]];
         then
         for domain in $(echo $LEGO_DOMAINS | tr "," " ")
@@ -68,15 +68,14 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
             args="$args --domains=$domain" 
         done
     fi
-
-    if [[ -n "$LEGO_SERVER" ]] && $STAGING ;
+    if [[ -n "$LEGO_SERVER" ]] && $STAGING;
         then
         echo "[warn] Staging and server option cannot specified at the same time."
         echo "       Forcing staging option with server --server=https://acme-staging-v02.api.letsencrypt.org/directory"
         LEGO_SERVER="https://acme-staging-v02.api.letsencrypt.org/directory"
-    elif $STAGING ;
+    elif $STAGING;
         then
-        echo "[warn] Enabling staging with default server"
+        echo "[info] Enabling staging with default server"
         LEGO_SERVER="https://acme-staging-v02.api.letsencrypt.org/directory"
     fi
 
@@ -95,6 +94,7 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
         then
         args="$args$LEGO_ARGS"
     fi
+
     set -- lego $args$op
 
     ## Enable autorenewal at start up time

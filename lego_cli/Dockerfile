@@ -70,10 +70,10 @@ ENV BUILD_IMAGE_VERSION="${BUILD_IMAGE_VERSION}"
 # General options
 ENV LEGO_EMAIL= \
     LEGO_DOMAINS= \
-    LEGO_SERVER= \
+    LEGO_SERVER="https://acme-v02.api.letsencrypt.org/directory" \
     LEGO_CSR= \
     LEGO_ACCEPT_TOS="true" \
-    LEGO_PATH="/opt/lego/ssl/" \
+    LEGO_PATH="/opt/lego/ssl" \
 # Staging option
     STAGING="false" \
 # Certificate autorenewal option
