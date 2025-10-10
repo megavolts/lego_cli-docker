@@ -34,7 +34,7 @@ jobs:
             echo "No release existing"
             cat buildvars | grep BUILD_IMAGE_VERSION >> $GITHUB_OUTPUT
         else
-            LATEST_RELEASE=$(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | jq '.[0] | .name' -r | grep -Eo '([0-9]+)(\.?[0-9]+)*' | head -1)
+            LATEST_RELEASE=$(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | jq '.[0] | .name' -r)
 
             if [[ $LATEST_RELEASE = $BUILD_IMAGE_VERSION ]];
                 then
