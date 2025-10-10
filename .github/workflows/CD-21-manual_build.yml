@@ -14,7 +14,7 @@ jobs:
     outputs:
       BUILD_DATE: ${{ steps.IMPORT_BUILDVARS.outputs.BUILD_DATE }}
       BUILD_IMAGE_VERSION: ${{ steps.IMPORT_BUILDVARS.outputs.BUILD_IMAGE_VERSION }}
-    
+
     steps:             
     - name: Checkout source
       uses: actions/checkout@v5
@@ -28,7 +28,7 @@ jobs:
         cat buildvars | grep LEGO_VERSION >> $GITHUB_OUTPUT
         BUILD_IMAGE_VERSION=$(cat buildvars | grep BUILD_IMAGE_VERSION)
         BUILD_VERSION=$(echo $BUILD_IMAGE_VERSION | cut -d- -f1)
-
+        BUILD_REVISION=$(echo $BUILD_IMAGE_VERSION | cut -d- -f2)
         if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | grep "status" | cut -d\" -f4) = 404 ]];
             then
             echo "No release existing"
@@ -44,8 +44,10 @@ jobs:
                 BUILD_REVISION=$(( $BUILD_REVISION +1 ))
                 BUILD_IMAGE_VERSION=$BUILD_VERSION-$BUILD_REVISION
                 echo "BUILD_IMAGE_VERSION=$BUILD_IMAGE_VERSION" >> $GITHUB_OUTPUT
+                echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT
                 echo "FLAG_REVISION=1" >>$GITHUB_OUTPUT
             else
+              echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT
               cat buildvars | grep BUILD_IMAGE_VERSION >> $GITHUB_OUTPUT
             fi
 
