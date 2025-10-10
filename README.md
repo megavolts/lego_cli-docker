@@ -152,9 +152,7 @@ docker run --rm megavolts/lego_cli -h
 # or specific subcommand options
 docker run --rm megavolts/lego_cli lego run -h
 ```
-
 For more details check out the [Lego CLI](https://go-acme.github.io/lego/usage/cli/) available options.
-
 
 # Contributions
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in current work by you, as defined in the Apache-2.0 license, shall be dual licensed as described below, without any additional terms or conditions.
