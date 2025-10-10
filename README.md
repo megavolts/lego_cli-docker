@@ -5,7 +5,7 @@
 <a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/tags" title="Docker Image Size (tag)"><img src="https://img.shields.io/docker/image-size/joseluisq/docker-lets-encrypt/latest"></a> 
 <a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/joseluisq/docker-lets-encrypt.svg"></a> 
 -->
-> An A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest [__Alpine](https://hub.docker.com/_/alpine)__.
+> A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest __[Alpine](https://hub.docker.com/_/alpine)__.
 
 ## Usage
 
