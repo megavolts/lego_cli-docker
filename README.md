@@ -5,6 +5,17 @@
 <a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image Version (tag latest semver)"><img src="https://img.shields.io/docker/v/megavolts/lego_cli/latest"></a> 
 <a href="https://hub.docker.com/r/megavolts/lego_cli/tags" title="Docker Image Size (tag)"><img src="https://img.shields.io/docker/image-size/megavolts/lego_cli/latest"></a> 
 <a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/megavolts/lego_cli.svg"></a> 
+[CD BUILD](https://img.shields.io/github/actions/workflow/status/megavolts/lego_cli-docker/CD-30-tag_and_release.yml?branch=main&label=Build)
+
+[![License][license-shield]](LICENSE-MIT.md)
+[![License][license-shield]](LICENSE-APACHE.md)
+
+![Supports aarch64 Architecture][aarch64-shield]
+![Supports amd64 Architecture][amd64-shield]
+![Supports armhf Architecture][armhf-shield]
+![Supports armv7 Architecture][armv7-shield]
+![Supports i386 Architecture][i386-shield]
+
 
 > A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest __[Alpine](https://hub.docker.com/_/alpine)__.
 
