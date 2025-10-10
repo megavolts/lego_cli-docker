@@ -144,15 +144,16 @@ By default, the **Lego CLI** `run` subcommand will be executed, which will [obta
 To [renew a certificate](https://go-acme.github.io/lego/usage/cli/renew-a-certificate/), use the following environment variables instead.
 
 - `LEGO_RENEW=false` It tells Lego CLI to perform a `renewal` operation on demand.
-- `LEGO_RENEW_DAYS=30` The number of days left on a certificate to renew it.
 
-#### Certificate autorenewal
+This container uses the default behavior of the upcoming Lego v5 to compute dynamically when to renew the certificate based on the lifetime using hte `--dynamic` option. 
+
+#### Certificate Autorenewal
 
 **NOTE:** The autorenewal feature should work for a list of domain
 
 - `AUTORENEW=true` By setting this flg to false, disables the autorenewal feature
 - `AUTORENEW_PERIOD=3` Number of days before the certificate expiration to perform a renewal try.
-- `AUTORENEW_CRON=0 */24* * * *` The crontab schedule for the autorenewal checker (default, once every 24 hours)
+- `AUTORENEW_CRON_SCHEDULE=0 */24* * * *` The crontab schedule for the autorenewal checker (default, once every 24 hours)
 
 When the option is `AUTORENEW=true` then a script will programmatically check the certificate days before the expiration (`AUTORENEW_PERIOD`) and will perform a renewal try. Note that setting `AUTORENEW=true` disables `LEGO_RENEW` should be disabled (`false`) when using this feature because it refers to the Lego CLI `renew` operation (subcommand).
 
