@@ -34,4 +34,4 @@ docker buildx build $GIT_DIR/lego_cli/ \
         --build-arg BUILD_DATE=$BUILD_DATE \
         --build-arg TARGETPLATFORM=$TARGETPLATFORM \
         --load
-        # --no-cache \
+        # --no-cache
