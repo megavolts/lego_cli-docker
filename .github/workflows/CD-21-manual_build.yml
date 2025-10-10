@@ -44,10 +44,50 @@ jobs:
                 BUILD_REVISION=$(( $BUILD_REVISION +1 ))
                 BUILD_IMAGE_VERSION=$BUILD_VERSION-$BUILD_REVISION
                 echo "BUILD_IMAGE_VERSION=$BUILD_IMAGE_VERSION" >> $GITHUB_OUTPUT
+                echo "FLAG_REVISION=1" >>$GITHUB_OUTPUT
             else
               cat buildvars | grep BUILD_IMAGE_VERSION >> $GITHUB_OUTPUT
             fi
+
+            # Update buildvars
+
         fi
+    # TODO make this job happens only if FLAG_REVISION=1
+    - name: Import GPG key 
+      id: IMPORT_GPG
+      uses: crazy-max/ghaction-import-gpg@v6
+      with:
+        gpg_private_key: ${{ secrets.BOT_GPG_PRIVATE_KEY }}
+        passphrase: ${{ secrets.BOT_GPG_PWD }}
+        git_user_signingkey: true
+        git_commit_gpgsign: true
+        git_push_gpgsign: false
+        trust_level: 5
+
+    - name: Push updates buildvar to repository if needed
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GIT_AUTHOR_NAME: ${{ steps.IMPORT_GPG.outputs.name }}
+        GIT_AUTHOR_EMAIL: ${{ steps.IMPORT_GPG.outputs.email }}
+        GIT_COMMITTER_NAME: ${{ steps.IMPORT_GPG.outputs.name }}
+        GIT_COMMITTER_EMAIL: ${{ steps.IMPORT_GPG.outputs.email }}
+      run: |
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}  
+
+        BUILD_DATE=$(date  --iso-8601=seconds --utc)
+        LEGO_VERSION=${{ steps.GET_VERSIONS.outputs.LEGO_VERSION }}
+        BUILD_REVISION=${{ steps.IS_UPDATE_AVAILABLE.outputs.BUILD_REVISION }}
+        BUILD_IMAGE_VERSION=$LEGO_VERSION-$BUILD_REVISION
+        
+        echo "Upcoming build version: $BUILD_IMAGE_VERSION"
+        echo BUILD_DATE=$BUILD_DATE > buildvars
+        echo LEGO_VERSION=$LEGO_VERSION >> buildvars
+        echo BUILD_IMAGE_VERSION=$BUILD_IMAGE_VERSION >> buildvars
+
+        git add buildvars
+        git commit buildvars -m "Updated buildvars"
+        git push origin main
+        exit 0
 
   lego_cli-build: 
     # if: ${{ github.event.workflow_run.conclusion == 'success' }}
