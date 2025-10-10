@@ -109,9 +109,6 @@ elif [[ -n "$LEGO_ENABLE" ]] && [[ "$LEGO_ENABLE" = "true" ]];
             # NOTE: If a domain list is provided, the certificate is named after the first domain
             domain=$(echo $LEGO_DOMAINS | sed 's/,.*//' | sed 's/;.*//' | sed 's/*.//')
             cert_file=$LEGO_PATH/certificates/$domain.crt
-            echo $LEGO_DOMAINS
-            echo $domain
-            echo $cert_file
             # TODO: check that the certificate covers all the domains
             if [ -f $cert_file ];
                 then

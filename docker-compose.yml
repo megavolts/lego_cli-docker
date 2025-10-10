@@ -7,7 +7,7 @@ services:
       - LEGO_ENABLE=true
       - LEGO_EMAIL=${LEGO_EMAIL}
       # Domains should be comma separated
-      - LEGO_DOMAINS=adguard.atka.redtrim.dev,atka.redtrim.dev
+      - LEGO_DOMAINS=domain.tld
       # Lego CLI DNS provider
       - LEGO_DNS=porkbun
       - PORKBUN_API_KEY=${PORKBUN_API_KEY}
