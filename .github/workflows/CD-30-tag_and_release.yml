@@ -41,9 +41,9 @@ jobs:
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
             # new build
-            DOCKER_IMAGE_VERSION=$(cat ./buildvars | awk '/^DOCKER_IMAGE_VERSION=/' | cut -d= -f2)
-            RELEASE_VERSION=$(echo $DOCKER_IMAGE_VERSION | cut -d= -f2 | cut -d- -f1)
-            RELEASE_TAG=v$DOCKER_IMAGE_VERSION
+            BUILD_IMAGE_VERSION=$(cat ./buildvars | awk '/^BUILD_IMAGE_VERSION=/' | cut -d= -f2)
+            RELEASE_VERSION=$(echo $BUILD_IMAGE_VERSION | cut -d= -f2 | cut -d- -f1)
+            RELEASE_TAG=v$BUILD_IMAGE_VERSION
 
             # previous build
             if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli/releases | grep "status" | cut -d\" -f4) = 404 ]] ;
@@ -87,8 +87,8 @@ jobs:
 
             git fetch --all --tags
 
-            git checkout -b "$DOCKER_IMAGE_VERSION" "$RELEASE_TAG"
-            git push --set-upstream origin "$DOCKER_IMAGE_VERSION"
-            gh release create "$RELEASE_TAG" -t "$DOCKER_IMAGE_VERSION" -n "$RELEASE_NOTE" --latest
+            git checkout -b "$BUILD_IMAGE_VERSION" "$RELEASE_TAG"
+            git push --set-upstream origin "$BUILD_IMAGE_VERSION"
+            gh release create "$RELEASE_TAG" -t "$BUILD_IMAGE_VERSION" -n "$RELEASE_NOTE" --latest
             
             exit 0
