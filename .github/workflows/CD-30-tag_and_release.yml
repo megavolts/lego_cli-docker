@@ -4,7 +4,7 @@ name: CD 30 Tag and Release
 on:
 #  workflow_dispatch:     
   workflow_run:
-    workflows: [CD 20 Build Unbound Docker Image]
+    workflows: [CD 20 Build and Push]
     types:
       - completed
 
