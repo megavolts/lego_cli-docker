@@ -7,14 +7,19 @@
 <a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/megavolts/lego_cli.svg"></a> 
 [CD BUILD](https://img.shields.io/github/actions/workflow/status/megavolts/lego_cli-docker/CD-30-tag_and_release.yml?branch=main&label=Build)
 
-[![License][license-shield]](LICENSE-MIT.md)
-[![License][license-shield]](LICENSE-APACHE.md)
+![CD Build Docker Image]
 
-![Supports aarch64 Architecture][[aarch64-shield](https://img.shields.io/badge/aarch64-yes-blue)]
-![Supports amd64 Architecture][amd64-shield]
-![Supports armhf Architecture][armhf-shield]
-![Supports armv7 Architecture][armv7-shield]
-![Supports i386 Architecture][i386-shield]
+
+
+[![License][license-shield]](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-MIT-green)[https://github.com/megavolts/lego_cli-docker/blob/main/LICENSE-MIT]
+[![License][license-shield]](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-Apache-green)[https://github.com/megavolts/lego_cli-docker/blob/main/LICENSE-APACHE]
+
+![Supports aarch64 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/aarch64-yes-green)
+![Supports amd64 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/amd64-yes-green)
+![Supports armv7 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/armv7-yes-green)
+![Supports armv6 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/armv6-yes-green)
+![Supports i386 Architecture](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/i386-yes-green)
+
 
 
 > A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest __[Alpine](https://hub.docker.com/_/alpine)__.
