@@ -1,10 +1,11 @@
 # Docker Let's Encrypt 
 <!---
 <a href="https://github.com/joseluisq/docker-lets-encrypt/actions/workflows/devel.yml" title="devel ci"><img src="https://github.com/joseluisq/docker-lets-encrypt/actions/workflows/devel.yml/badge.svg?branch=master"></a> 
-<a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/" title="Docker Image Version (tag latest semver)"><img src="https://img.shields.io/docker/v/joseluisq/docker-lets-encrypt/latest"></a> 
-<a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/tags" title="Docker Image Size (tag)"><img src="https://img.shields.io/docker/image-size/joseluisq/docker-lets-encrypt/latest"></a> 
-<a href="https://hub.docker.com/r/joseluisq/docker-lets-encrypt/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/joseluisq/docker-lets-encrypt.svg"></a> 
 -->
+<a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image Version (tag latest semver)"><img src="https://img.shields.io/docker/v/megavolts/lego_cli/latest"></a> 
+<a href="https://hub.docker.com/r/megavolts/lego_cli/tags" title="Docker Image Size (tag)"><img src="https://img.shields.io/docker/image-size/megavolts/lego_cli/latest"></a> 
+<a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/megavolts/lego_cli.svg"></a> 
+
 > A multi-arch [Let's Encrypt](https://letsencrypt.org/) Docker image using [Lego CLI](https://go-acme.github.io/lego/) client with convenient environment variables and auto-renewal support on top of the latest __[Alpine](https://hub.docker.com/_/alpine)__.
 
 ## Usage
