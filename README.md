@@ -2,14 +2,18 @@
 <!---
 <a href="https://github.com/joseluisq/docker-lets-encrypt/actions/workflows/devel.yml" title="devel ci"><img src="https://github.com/joseluisq/docker-lets-encrypt/actions/workflows/devel.yml/badge.svg?branch=master"></a> 
 -->
+
+![lego version](https://img.shields.io/github/v/release/go-acme/lego?label=go-acme%2Flego%20release)
+![lego_cli version](https://img.shields.io/github/v/release/megavolts/lego_cli?label=go-acme%2Flego%20release)
+
 <a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image Version (tag latest semver)"><img src="https://img.shields.io/docker/v/megavolts/lego_cli/latest"></a> 
 <a href="https://hub.docker.com/r/megavolts/lego_cli/tags" title="Docker Image Size (tag)"><img src="https://img.shields.io/docker/image-size/megavolts/lego_cli/latest"></a> 
 <a href="https://hub.docker.com/r/megavolts/lego_cli/" title="Docker Image"><img src="https://img.shields.io/docker/pulls/megavolts/lego_cli.svg"></a> 
 ![CD BUILD](https://img.shields.io/github/actions/workflow/status/megavolts/lego_cli-docker/CD-30-tag_and_release.yml?branch=main&label=Build)
 
 
-![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-MIT-green)
-![License](https://img.shields.io/badge/aarch64-yes-greenhttps://img.shields.io/badge/license-Apache-green)
+![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-Apache-green)
 
 ![Supports aarch64 Architecture](https://img.shields.io/badge/aarch64-yes-green)
 ![Supports amd64 Architecture](https://img.shields.io/badge/amd64-yes-green)
