@@ -15,7 +15,7 @@ lego_cli-docker-to_del
 README.md
 /lego/rootfs/opt/lego/bin/renew_certificate.sh
 .env
-docker-compose.yml
+#docker-compose.yml
 ssl/*
 .lego
 
