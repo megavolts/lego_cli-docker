@@ -46,7 +46,7 @@ jobs:
             RELEASE_VERSION=$(echo $BUILD_IMAGE_VERSION | cut -d= -f2 | cut -d- -f1)
             RELEASE_TAG=v$BUILD_IMAGE_VERSION
 
-            # initial or previous build
+            # previous build
             if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | grep "status" | cut -d\" -f4) = 404 ]] ;
                 then
                 echo "No release existing"
@@ -60,15 +60,15 @@ jobs:
             if [[ $FLAG_FIRST_RELEASE = "true" ]];
                 then
                 NOTES="\x23\x23 $(date '+%Y-%m-%d') \n\x23\x23 Initial Release"
-                NOTES+="\n:fireworks: With go-acme lego $RELEASE_VERSION)"
-                NOTES+="\n\n\x2A\x2Ago-acme lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
+                NOTES+="\n:fireworks: With go-acme lego $RELEASE_VERSION"
+                NOTES+="\n\n\x2A\x2Ago-acme/lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
 
             else
                 NOTES="\x23\x23 $(date '+%Y-%m-%d') \n\x23\x23 What's Changed?"
                 if ! [[ $RELEASE_VERSION = $PREVIOUS_RELEASE_VERSION ]] ;
                     then
-                    NOTES+="\n:arrow_up_small: Updated Lego to $RELEASE_VERSION)"
-                    NOTES+="\n\n\x2A\x2Ago-acme lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
+                    NOTES+="\n:arrow_up_small: Updated Lego to $RELEASE_VERSION"
+                    NOTES+="\n\n\x2A\x2Ago-acme/lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
                 fi
             fi
 

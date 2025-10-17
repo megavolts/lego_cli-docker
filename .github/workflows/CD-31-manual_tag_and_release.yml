@@ -45,41 +45,34 @@ jobs:
             RELEASE_TAG=v$BUILD_IMAGE_VERSION
 
             # previous build
-            if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli/releases | grep "status" | cut -d\" -f4) = 404 ]] ;
+            if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | grep "status" | cut -d\" -f4) = 404 ]] ;
                 then
                 echo "No release existing"
                 FLAG_FIRST_RELEASE=true
             else
-                PREVIOUS_RELEASE=$(curl -s https://api.github.com/repos/megavolts/lego_cli/releases | jq '.[0] | .name' -r | grep -Eo '([0-9]+)(\.?[0-9]+)*' | head -1)
+                PREVIOUS_RELEASE=$(curl -s https://api.github.com/repos/megavolts/lego_cli-docker/releases | jq '.[0] | .name' -r | grep -Eo '([0-9]+)(\.?[0-9]+)*' | head -1)
                 PREVIOUS_RELEASE_VERSION=$(curl -s https://raw.githubusercontent.com/megavolts/lego_cli/refs/heads/$PREVIOUS_RELEASE/buildvars | awk '/^LEGO_VERSION=/' | cut -d= -f2)
-            fi
-
-            # new release
-            if [[ $(curl -s https://api.github.com/repos/megavolts/lego_cli/releases | grep "status" | cut -d\" -f4) = 404 ]] ;
-                then
-                echo "No release existing"
-                FLAG_FIRST_RELEASE=true
-            else
-                PREVIOUS_RELEASE=$(curl -s https://api.github.com/repos/megavolts/lego_cli/releases | jq '.[0] | .name' -r | grep -Eo '([0-9]+)(\.?[0-9]+)*' | head -1)
-                PREVIOUS_RELEASE_VERSION=$(curl -s https://raw.githubusercontent.com/megavolts/lego_cli/refs/heads/$PREVIOUS_RELEASE/buildvars | awk '/^LEGO_VERSION=/' | cut -d= -f2)
+                FLAG_FIRST_RELEASE=false
             fi
 
             if [[ $FLAG_FIRST_RELEASE = "true" ]];
                 then
                 NOTES="\x23\x23 $(date '+%Y-%m-%d') \n\x23\x23 Initial Release"
-                NOTES+="\n:fireworks: With go-acme lego $RELEASE_VERSION)"
-                NOTES+="\n\n\x2A\x2Ago-acme lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
+                NOTES+="\n:fireworks: With go-acme lego $RELEASE_VERSION"
+                NOTES+="\n\n\x2A\x2Ago-acme/lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
 
             else
                 NOTES="\x23\x23 $(date '+%Y-%m-%d') \n\x23\x23 What's Changed?"
                 if ! [[ $RELEASE_VERSION = $PREVIOUS_RELEASE_VERSION ]] ;
                     then
-                    NOTES+="\n:arrow_up_small: Updated Lego to $RELEASE_VERSION)"
-                    NOTES+="\n\n\x2A\x2Ago-acme lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
+                    NOTES+="\n:arrow_up_small: Updated Lego to $RELEASE_VERSION"
+                    NOTES+="\n\n\x2A\x2Ago-acme/lego changelog\x2A\x2A: https://github.com/go-acme/lego/releases/tag/v$RELEASE_VERSION" ;
                 fi
             fi
 
             RELEASE_NOTE=$(echo -e $NOTES)
+
+            echo $RELEASE_NOTE
 
             git tag -a "$RELEASE_TAG" -m "$RELEASE_TAG"
             git push -u origin "$RELEASE_TAG"
