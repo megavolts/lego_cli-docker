@@ -3,10 +3,6 @@ name: CD 21 Manual Build
    
 on:
   workflow_dispatch:  
-#  workflow_run:
-#    workflows: [CD 10 Unbound and OpenSSL Build Environement Release]
-#    types:
-#      - completed
 
 jobs:
   buildvars:
@@ -49,7 +45,6 @@ jobs:
 
                 echo "BUILD_IMAGE_VERSION=$BUILD_IMAGE_VERSION" >> $GITHUB_OUTPUT
                 echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT
-
                 
             else
               echo "BUILD_REVISION=$BUILD_REVISION" >> $GITHUB_OUTPUT

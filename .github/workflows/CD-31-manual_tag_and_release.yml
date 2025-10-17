@@ -2,11 +2,10 @@
 name: CD 31 manual Tag and Release
    
 on:
-  workflow_dispatch:     
-#   workflow_run:
-#     workflows: [CD 20 Build Unbound Docker Image]
-#     types:
-#       - completed
+  workflow_run:
+    workflows: [CD 21 Manual Build]
+    types:
+      - completed
 
 jobs: 
   tag_and_release:

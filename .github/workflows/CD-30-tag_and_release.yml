@@ -6,7 +6,6 @@ on:
   workflow_run:
     workflows:
       - CD 20 Build and Push
-      - CD 21 Manual Build and push
     types:
       - completed
 
