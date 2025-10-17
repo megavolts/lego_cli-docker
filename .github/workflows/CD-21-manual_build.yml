@@ -121,7 +121,7 @@ jobs:
           DOCKERHUB_SLUG: "megavolts/lego_cli"
         with:
           outputs: type=cacheonly
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             BUILD_DATE=${{ needs.buildvars.outputs.BUILD_DATE }}  
